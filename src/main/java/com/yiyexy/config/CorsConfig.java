@@ -1,4 +1,4 @@
-package com.yiyexy.model.config;
+package com.yiyexy.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

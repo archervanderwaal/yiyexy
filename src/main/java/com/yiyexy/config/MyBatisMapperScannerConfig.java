@@ -1,4 +1,4 @@
-package com.yiyexy.model.config;
+package com.yiyexy.config;
 
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;

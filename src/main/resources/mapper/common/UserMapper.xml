@@ -16,15 +16,90 @@
 
     <!--根据用户名和密码查询用户-->
     <select id="getUser" resultMap="UserResultMap" parameterType="com.yiyexy.model.common.User">
-        SELECT id, icon, user_name, qq, type, mobile, good_apprise, bad_apprise
+        SELECT
+        id, icon, user_name, qq, type, mobile, good_apprise, bad_apprise
         FROM
         user
         WHERE 1 = 1
-        <if test="mobile != null">
-            AND mobile = #{mobile}
+        <if test="user.mobile != null">
+            AND mobile = #{user.mobile}
         </if>
-        <if test="password != null">
-            AND password = #{password}
+        <if test="user.password != null">
+            AND password = #{user.password}
+        </if>
+    </select>
+
+    <!--用户注册-->
+    <insert id="insertUser" parameterType="com.yiyexy.model.common.User" useGeneratedKeys="true" keyProperty="uid">
+        <if test="user.password != null and user.mobile != null">
+            INSERT INTO
+            user (mobile, password)
+            VALUES (#{user.mobile}, #{user.password});
+        </if>
+    </insert>
+
+    <!--判断用户名是否存在-->
+    <select id="isExistUserName" parameterType="String" resultType="int">
+        <if test="userName != null">
+            SELECT
+            COUNT(*)
+            FROM
+            user
+            WHERE user_name = #{userName};
+        </if>
+    </select>
+
+    <!--判断手机号码是否存在-->
+    <select id="isExistMobile" parameterType="String" resultType="int">
+        <if test="mobile != null">
+            SELECT
+            COUNT(*)
+            FROM
+            user
+            WHERE mobile = #{mobile};
+        </if>
+    </select>
+
+    <!--根据手机号码修改用户名-->
+    <update id="updateUserName" parameterType="com.yiyexy.model.common.User">
+        <if test="user.obile != null and user.userName != null">
+            UPDATE
+            user
+            SET user_name = #{user.userName}
+            WHERE mobile = #{user.mobile};
+        </if>
+    </update>
+
+    <!--根据手机号码修改用户密码-->
+    <update id="updatePassword" parameterType="com.yiyexy.model.common.User">
+        <if test="user.mobile != null and user.password != null">
+            UPDATE
+            user
+            SET
+            password = #{user.password}
+            WHERE mobile = #{user.mobile};
+        </if>
+    </update>
+
+    <!--根据手机号码修改用户的qq信息-->
+    <update id="updateQQ" parameterType="com.yiyexy.model.common.User">
+        <if test="user.mobile != null and user.qq != null">
+            UPDATE
+            user
+            SET
+            qq = #{user.qq}
+            WHERE mobile = #{user.mobile};
+        </if>
+    </update>
+
+    <!--根据手机号码查询用户的 updatePwdCount 字段-->
+    <select id="getUpdatePwdCount" parameterType="String" resultType="int">
+        <if test="mobile != null">
+            SELECT
+            update_pwd_count
+            FROM
+            user
+            WHERE mobile = #{mobile};
         </if>
     </select>
 </mapper>

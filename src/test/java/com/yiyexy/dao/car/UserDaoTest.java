@@ -39,4 +39,83 @@ public class UserDaoTest {
 
         LOGGER.info("测试结果:{}", result);
     }
+
+    @Test
+    public void testInsertUser() {
+
+        User user = new User();
+
+        user.setMobile("18292817801");
+        user.setPassword(EncryptionUtil.md5Encryption("woaini"));
+
+        userDao.insertUser(user);
+        LOGGER.info("插入用户的id:{}", user.getUid());
+    }
+
+    @Test
+    public void testIsExistUserName() {
+
+        String userName = "StormMaybin";
+
+        int result = userDao.isExistUserName(userName);
+
+        LOGGER.info("测试结果:{}", result);
+    }
+
+    @Test
+    public void testIsExistMobile() {
+
+        String mobile = "18292817803";
+
+        int result = userDao.isExistMobile(mobile);
+
+        LOGGER.info("测试结果:{}", result);
+    }
+
+    @Test
+    public void testUpdateUserName() {
+
+        User user = new User();
+        user.setUserName("StormMa");
+        user.setMobile("18292817803");
+
+        userDao.updateUserName(user);
+
+        LOGGER.info("测试成功");
+    }
+
+    @Test
+    public void testUpdatePassword() {
+
+        User user = new User();
+        user.setMobile("18292817803");
+        user.setPassword(EncryptionUtil.md5Encryption("StormMa"));
+
+        userDao.updatePassword(user);
+
+        LOGGER.info("测试成功");
+    }
+
+    @Test
+    public void testUpdateQQ() {
+
+        User user = new User();
+
+        user.setQq("1325338799");
+        user.setMobile("18292817803");
+
+        userDao.updateQQ(user);
+
+        LOGGER.info("测试成功");
+    }
+
+    @Test
+    public void testGetUpdatePwdCount() {
+
+        String mobile = "18292817803";
+
+        Integer result = userDao.getUpdatePwdCount(mobile);
+
+        LOGGER.info("测试结果:{}", result);
+    }
 }

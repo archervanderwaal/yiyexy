@@ -1,4 +1,4 @@
-package com.yiyexy.model.config;
+package com.yiyexy.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
