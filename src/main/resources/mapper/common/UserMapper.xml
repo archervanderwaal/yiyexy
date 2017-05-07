@@ -102,4 +102,26 @@
             WHERE mobile = #{mobile};
         </if>
     </select>
+
+    <!--根据id获得用户信息-->
+    <select id="getUserById" parameterType="Integer" resultMap="UserResultMap">
+        <if test="uid != null">
+            SELECT
+            id, icon, user_name, qq, type, mobile, good_apprise, bad_apprise
+            FROM
+            user
+            WHERE id = #{uid};
+        </if>
+    </select>
+
+    <!--验证手机号码和密码是否匹配-->
+    <select id="getUidByMobileAndPassword" parameterType="com.yiyexy.model.common.User" resultType="Integer">
+        <if test="user.mobile != null and user.password != null">
+            SELECT
+            id
+            FROM
+            user
+            WHERE mobile = #{user.mobile} AND password = #{user.password};
+        </if>
+    </select>
 </mapper>

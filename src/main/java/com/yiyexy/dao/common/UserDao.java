@@ -66,4 +66,18 @@ public interface UserDao {
      * @return
      */
     Integer getUpdatePwdCount(@Param("mobile") String mobile);
+
+    /**
+     * <p>根据用户id获得用户信息</p>
+     * @param uid
+     * @return
+     */
+    User getUserById(@Param("uid") Integer uid);
+
+    /**
+     * <p>根据 mobile 和 password 获得 uid</p>
+     * @param user
+     * @return
+     */
+    Integer getUidByMobileAndPassword(@Param(("user"))User user);
 }
