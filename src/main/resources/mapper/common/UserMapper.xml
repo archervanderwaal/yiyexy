@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyexy.dao.common.UserDao">
+    <resultMap id="UserResultMap" type="com.yiyexy.model.common.User">
+        <id column="id" property="uid"/>
+        <result column="icon" property="icon"/>
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="qq" property="qq"/>
+        <result column="type" property="type"/>
+        <result column="mobile" property="mobile"/>
+        <result column="good_apprise" property="goodApprise"/>
+        <result column="bad_apprise" property="badApprise"/>
+        <result column="update_pwd_count" property="updatePwdCount"/>
+    </resultMap>
+
+    <!--根据用户名和密码查询用户-->
+    <select id="getUser" resultMap="UserResultMap" parameterType="com.yiyexy.model.common.User">
+        SELECT id, icon, user_name, qq, type, mobile, good_apprise, bad_apprise
+        FROM
+        user
+        WHERE 1 = 1
+        <if test="mobile != null">
+            AND mobile = #{mobile}
+        </if>
+        <if test="password != null">
+            AND password = #{password}
+        </if>
+    </select>
+</mapper>
