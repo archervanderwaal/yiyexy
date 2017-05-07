@@ -32,7 +32,7 @@ public class Swagger2Configuration {
     private ApiInfo buildApiInf() {
         return new ApiInfoBuilder()
                 .title("一页校园api文档")
-                .contact("一页校园")
+                .contact("StormMa")
                 .version(" v1.0")
                 .build();
     }

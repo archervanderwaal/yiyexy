@@ -19,7 +19,11 @@ public class UserConstant {
 
     public static final String CONTROLLER_DESC = "处理用户数据的请求";
 
+    public static final String UPDATE_PASSWORD = "修改用户密码";
+
     public static final String MOBILE_DESC = "用户手机号码";
+
+    public static final String AUTHORIZATION_TOKEN = "授权码(格式: uid_token)";
     
     public static final int NO_THIS_MOBILE = -1;
 

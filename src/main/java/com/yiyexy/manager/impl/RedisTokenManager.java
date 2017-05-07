@@ -70,7 +70,7 @@ public class RedisTokenManager implements TokenManager {
             return false;
         }
         String token = redisTemplate.boundValueOps(model.getUid()).get();
-        if (token == null || !token.equals(model.getToken())) {
+        if (token == null || !token.trim().equals(model.getToken().trim())) {
             return false;
         }
         //如果验证成功，说明此用户进行了一次有效操作，延长token的过期时间

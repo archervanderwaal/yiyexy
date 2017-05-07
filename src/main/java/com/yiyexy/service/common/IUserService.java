@@ -18,4 +18,12 @@ public interface IUserService {
      * @return
      */
      Map<String, Integer> isLoginSuccess(String mobile, String password);
+
+    /**
+     * 修改密码
+     * @param mobile
+     * @param password
+     * @return
+     */
+     boolean updatePassword(String mobile, String password);
 }

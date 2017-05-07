@@ -55,4 +55,20 @@ public class UserService implements IUserService {
         }
         return datas;
     }
+
+    /**
+     * 修改密码
+     * @param mobile
+     * @param password
+     * @return
+     */
+    @Override
+    public boolean updatePassword(String mobile, String password) {
+
+        User paramUser = new User();
+        paramUser.setMobile(mobile);
+        paramUser.setPassword(password);
+        userDao.updatePassword(paramUser);
+        return true;
+    }
 }
