@@ -4,6 +4,8 @@ import com.yiyexy.model.common.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * <p>Created on 2017/5/7.</p>
  *
@@ -80,4 +82,11 @@ public interface UserDao {
      * @return
      */
     Integer getUidByMobileAndPassword(@Param(("user"))User user);
+
+    /**
+     * 根据拼车信息 id 查询已加入用户的信息
+     * @param iid
+     * @return
+     */
+    List<User> getUserByIid(@Param("iid") int iid);
 }

@@ -1,5 +1,9 @@
 package com.yiyexy.model.common;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * <p>Created on 2017/5/7.</p>
  *
@@ -12,51 +16,61 @@ public class User {
     /**
      * user id
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Integer uid;
 
     /**
      * icon
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String icon;
 
     /**
      * qq num
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String qq;
 
     /**
      * user name
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String userName;
 
     /**
      * password
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String password;
 
     /**
      * mobile
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String mobile;
 
     /**
      * good apprise
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Integer goodApprise;
 
     /**
      * bad apprise
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Integer badApprise;
 
     /**
      * update password count
      */
+    @JsonIgnore
     private Integer updatePwdCount;
 
     /**
      * type
      */
+    @JsonIgnore
     private Integer type;
 
     public Integer getUid() {

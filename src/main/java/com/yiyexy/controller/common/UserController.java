@@ -11,10 +11,7 @@ import com.yiyexy.service.common.IUserService;
 import com.yiyexy.util.ObjectUtil;
 import com.yiyexy.util.result.Result;
 import com.yiyexy.util.result.ResultBuilder;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -22,6 +19,15 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.util.Map;
 
 /**
+ *
+ *  _____ _                      ___  ___
+ /  ___| |                     |  \/  |
+ \ `--.| |_ ___  _ __ _ __ ___ | .  . | __ _
+ `--. \ __/ _ \| '__| '_ ` _ \| |\/| |/ _` |
+ /\__/ / || (_) | |  | | | | | | |  | | (_| |
+ \____/ \__\___/|_|  |_| |_| |_\_|  |_/\__,_| 我想念你，一如独自撸码的忧伤....
+ *
+ *
  * <p>Created on 2017/5/7.</p>
  *
  * @author stormma
@@ -42,18 +48,15 @@ public class UserController  extends BaseController {
 
     /**
      * 用户登录
-     * @param mobile
-     * @param password
+     * @param user
      * @return
      */
     @ApiOperation(value = UserConstant.LOGIN_DESC, httpMethod = "POST")
-    @ApiImplicitParams({@ApiImplicitParam(name = "mobile", value = UserConstant.MOBILE_DESC, paramType = "query"),
-                        @ApiImplicitParam(name = "password", value = UserConstant.USER_PASSWORD_DESC, paramType = "query")})
     @PostMapping(value = "/login")
-    public Result<Object> login(@RequestParam("mobile")String mobile, @RequestParam("password")String password) {
+    public Result<Object> login(@RequestBody User user) {
 
 
-        Map<String, Integer> datas = userService.isLoginSuccess(mobile, password);
+        Map<String, Integer> datas = userService.isLoginSuccess(user.getMobile(), user.getPassword());
 
         //如果登录失败
         if (!ObjectUtil.isEmpty(datas.get(CommonConstant.FAIL))) {
@@ -70,25 +73,78 @@ public class UserController  extends BaseController {
     /**
      * 修改密码
      * @param loginUser
-     * @param password
+     * @param user
      * @return
      */
     @Authorization
     @ApiOperation(value = UserConstant.UPDATE_PASSWORD, httpMethod = "POST")
-    @ApiImplicitParams({@ApiImplicitParam(name = "password", value = UserConstant.USER_PASSWORD_DESC, required = true
-                        ,paramType = "query"),
-                        @ApiImplicitParam(name = "authorization", value = UserConstant.AUTHORIZATION_TOKEN, required = true
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = UserConstant.AUTHORIZATION_TOKEN, required = true
                         , paramType = "header")})
     @PostMapping(value = "/update/password")
     public Result<Object> updatePassword(@ApiIgnore @CurrentUser User loginUser,
-                                         @RequestParam("password")String password) {
+                                         @RequestBody User user) {
 
         String mobile = loginUser.getMobile();
 
-        boolean result = userService.updatePassword(mobile, password);
+        boolean result = userService.updatePassword(mobile, user.getPassword());
         if (result) {
             return ResultBuilder.success();
         }
         return ResultBuilder.fail();
     }
+
+    /**
+     * 修改qq信息
+     * @param loginUser
+     * @param qq
+     * @return
+     */
+    @Authorization
+    @ApiOperation(value = UserConstant.UPDATE_QQ_NUM, httpMethod = "PUT")
+    @ApiImplicitParams({@ApiImplicitParam(name = "qq", value = UserConstant.USER_QQ_NUM, required = true
+                        , paramType = "path")
+                        , @ApiImplicitParam(name = "authorization", value = UserConstant.AUTHORIZATION_TOKEN, required = true
+                        , paramType = "header")})
+    @PutMapping(value = "/update/qq/{qq}")
+    public Result<Object> updateQQnum(@ApiIgnore @CurrentUser User loginUser,
+                                      @PathVariable String qq) {
+
+        String mobile = loginUser.getMobile();
+
+        boolean result = userService.updateQQNum(mobile, qq);
+
+        if (result) {
+            return ResultBuilder.success();
+        }
+        return ResultBuilder.fail();
+    }
+
+    /**
+     * <p>修改用户名</p>
+     * @param loginUser
+     * @param userName
+     * @return
+     */
+    @Authorization
+    @ApiOperation(value = UserConstant.UPDATE_USER_NAME, httpMethod = "PUT")
+    @ApiImplicitParams({@ApiImplicitParam(name = "userName", value = UserConstant.USER_NAME_DESC, required = true
+                        , paramType = "path")
+                        , @ApiImplicitParam(name = "authorization", value = UserConstant.AUTHORIZATION_TOKEN, required = true
+                        , paramType = "header")})
+    @PutMapping(value = "/update/username/{userName}")
+    public Result<Object> updateUserName(@ApiIgnore @CurrentUser User loginUser,
+                                         @PathVariable String userName) {
+        String mobile = loginUser.getMobile();
+        String result = userService.updateUserName(mobile, userName);
+
+        //修改成功
+        if (result.equals(CommonConstant.SUCCESS)) {
+            return ResultBuilder.success();
+        } else {
+            return ResultBuilder.fail(result);
+        }
+    }
+
+    //重置密码
+
 }

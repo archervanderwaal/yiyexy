@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.yiyexy.dao.car.CarInformationDao">
+    <!--重构心得，此处的三个 start_time，我真的对之前的代码伤心了，为啥会这样设计呢，但是暂时不太好改。就沿用吧，mbp-->
+    <resultMap id="CarInformationResultMap" type="com.yiyexy.model.car.CarInformation">
+        <id column="id" property="iid"/>
+        <result column="uid" property="uid"/>
+        <result column="start_date" property="startDate"/>
+        <result column="start_pos" property="startPos"/>
+        <result column="arrive_pos" property="arrivePos"/>
+        <result column="start_time_min_hour" property="startTimeMinHour"/>
+        <result column="start_time_min_min" property="startTimeMinMin"/>
+        <result column="start_time_max_hour" property="startTimeMaxHour"/>
+        <result column="start_time_max_min" property="startTimeMaxMin"/>
+        <result column="max_member" property="maxMember"/>
+        <result column="curt_member" property="curtMember"/>
+        <result column="message" property="message"/>
+        <result column="pub_time" property="pubTime"/>
+    </resultMap>
+
+    <!--添加行程信息-->
+    <insert id="insertCarInformation" parameterType="com.yiyexy.model.car.CarInformation" useGeneratedKeys="true" keyProperty="carInfo.iid">
+        <if test="carInfo.uid != null and carInfo.startDate != null and carInfo.startPos != null and carInfo.arrivePos != null
+                  and carInfo.startTimeMinHour != null and carInfo.startTimeMinMin != null and carInfo.startTimeMaxHour != null
+                  and carInfo.startTimeMaxMin != null and carInfo.maxMember != null and carInfo.curtMember != null and carInfo.pubTime != null and carInfo.message != null">
+            INSERT INTO car_information (uid, start_date, start_pos, arrive_pos, start_time_min_hour, start_time_min_min
+            , start_time_max_hour, start_time_max_min, max_member, curt_member, message, pub_time)
+
+            VALUES (#{carInfo.uid}, #{carInfo.startDate}, #{carInfo.startPos}, #{carInfo.arrivePos}, #{carInfo.startTimeMinHour}
+                  , #{carInfo.startTimeMinMin}, #{carInfo.startTimeMaxHour}, #{carInfo.startTimeMaxMin}, #{carInfo.maxMember}
+                  , #{carInfo.curtMember}, #{carInfo.message}, #{carInfo.pubTime});
+        </if>
+    </insert>
+
+    <delete id="removeCarInformation" parameterType="int">
+        DELETE
+        FROM
+        car_information
+        WHERE
+        id = #{iid};
+    </delete>
+
+    <!--根据 iid 查询拼车信息-->
+    <select id="getCarInformation" parameterType="int" resultMap="CarInformationResultMap">
+        SELECT
+        *
+        FROM
+        car_information
+        WHERE id = #{iid};
+    </select>
+
+    <!--查询所有的拼车行程信息-->
+    <select id="getAllCarInformation" resultMap="CarInformationResultMap">
+        SELECT
+        *
+        FROM
+        car_information;
+    </select>
+    
+    <!--根据发布时间查询行程信息-->
+    <select id="getCarInformationsByPubTime" parameterType="date" resultMap="CarInformationResultMap">
+        <if test="pubTime != null">
+            SELECT
+            *
+            FROM
+            car_information
+            WHERE pub_time = #{pubTime};
+        </if>
+    </select>
+
+    <!--查询用户自己的行程信息-->
+    <select id="getAllCarInfomationByUser" parameterType="int" resultMap="CarInformationResultMap">
+        <if test="uid != null">
+            SELECT
+            *
+            FROM
+            car_information ci
+            LEFT JOIN member m
+            ON ci.id = m.main_id
+            WHERE
+            m.id1 = #{uid} OR
+            m.id2 = #{uid} OR
+            m.id3 = #{uid} OR
+            m.id4 = #{uid} OR
+            m.id5 = #{uid} OR
+            m.id6 = #{uid};
+        </if>
+    </select>
+
+    <!--查询所有的行程信息根据开始日期-->
+    <select id="getCarInformationsByStartDate" parameterType="date" resultMap="CarInformationResultMap">
+        <if test="startDate != null">
+            SELECT
+            *
+            FROM
+            car_information
+            WHERE
+            start_date = #{startDate};
+        </if>
+    </select>
+</mapper>

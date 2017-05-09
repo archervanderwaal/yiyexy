@@ -3,16 +3,22 @@ package com.yiyexy.service.common.impl;
 import com.yiyexy.constant.CommonConstant;
 import com.yiyexy.constant.DBConstant;
 import com.yiyexy.constant.UserConstant;
+import com.yiyexy.constant.ValidateConstant;
 import com.yiyexy.dao.common.UserDao;
 import com.yiyexy.model.common.User;
+import com.yiyexy.service.common.IMessageService;
 import com.yiyexy.service.common.IUserService;
 import com.yiyexy.util.EncryptionUtil;
 import com.yiyexy.util.ObjectUtil;
+import com.yiyexy.util.RegexpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>Created on 2017/5/7.</p>
@@ -26,6 +32,18 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private IMessageService messageService;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private void setRedisTemplate(RedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+        redisTemplate.setKeySerializer(new JdkSerializationRedisSerializer());
+    }
 
     /**
      * 判断是否登录成功
@@ -67,8 +85,80 @@ public class UserService implements IUserService {
 
         User paramUser = new User();
         paramUser.setMobile(mobile);
-        paramUser.setPassword(password);
+        //md5加密
+        paramUser.setPassword(EncryptionUtil.md5Encryption(password));
         userDao.updatePassword(paramUser);
         return true;
+    }
+
+    /**
+     * 修改qq
+     * @param mobile
+     * @param qq
+     * @return
+     */
+    @Override
+    public boolean updateQQNum(String mobile, String qq) {
+        User paramUser = new User();
+
+        paramUser.setMobile(mobile);
+        paramUser.setQq(qq);
+        userDao.updateQQ(paramUser);
+
+        return true;
+    }
+
+    /**
+     * 修改用户名
+     * @param mobile
+     * @param userName
+     * @return
+     */
+    @Override
+    public String updateUserName(String mobile, String userName) {
+        User paramUser = new User();
+
+        paramUser.setMobile(mobile);
+        paramUser.setUserName(userName);
+
+        int count = userDao.getUpdatePwdCount(mobile);
+        if (count >= 1) {
+            return UserConstant.CAN_NOT_UPDATE_USER_NAME;
+        }
+        userDao.updateUserName(paramUser);
+        return CommonConstant.SUCCESS;
+    }
+
+    /**
+     * 注册时候发送验证码
+     * @param moible
+     * @return
+     */
+    @Override
+    public Map<String, String> sendValidateCode(String moible) {
+        Map<String, String> datas = new HashMap<>();
+        //正则匹配手机号码
+        if (!RegexpUtil.isMobileNum(moible)) {
+            datas.put(CommonConstant.FAIL, CommonConstant.INVALID_MOBILE_NUM);
+            return datas;
+        }
+        //判断是否可以发送短信
+        boolean isCanSend = messageService.isCanSendMessage(moible);
+        if (isCanSend) {
+            Map<String, String> result = messageService.sendMessage(moible);
+            if (!ObjectUtil.isEmpty(result.get(CommonConstant.SUCCESS))) {
+                //发送成功，保存验证码到 redis
+                redisTemplate.boundValueOps(moible).set(result.get(CommonConstant.SUCCESS),
+                        ValidateConstant.VALIDATE_CODE_VALID_TIME_MINUNTES, TimeUnit.MINUTES);
+                datas.put(CommonConstant.SUCCESS, result.get(CommonConstant.SUCCESS));
+                //增加发送次数
+                messageService.increaseSendValidateCodeCount(moible);
+            } else {
+                datas.put(CommonConstant.FAIL, ValidateConstant.VALIDATE_SEND_FAIL);
+            }
+        } else {
+            datas.put(CommonConstant.FAIL, ValidateConstant.VALIDATE_SEND_MAX_COUNT_CODE);
+        }
+        return datas;
     }
 }

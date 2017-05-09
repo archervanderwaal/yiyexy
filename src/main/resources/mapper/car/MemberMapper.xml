@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.yiyexy.dao.car.MemberDao">
+    <resultMap id="MemberResultMap" type="com.yiyexy.model.car.Member">
+        <id column="main_id" property="iid"/>
+        <result column="id1" property="uid1"/>
+        <result column="id2" property="uid2"/>
+        <result column="id3" property="uid3"/>
+        <result column="id4" property="uid4"/>
+        <result column="id5" property="uid5"/>
+        <result column="id6" property="uid6"/>
+    </resultMap>
+
+    <!--增加一个成员-->
+    <update id="addUserToMember" parameterType="com.yiyexy.model.car.Member">
+        <if test="member.uid2 != null">
+            UPDATE
+            member
+            SET
+            id2 = #{member.uid2}
+            WHERE
+            main_id = #{member.iid};
+        </if>
+        <if test="member.uid3 != null">
+            UPDATE
+            member
+            SET
+            id3 = #{member.uid3}
+            WHERE
+            main_id = #{member.iid};
+        </if>
+        <if test="member.uid4 != null">
+            UPDATE
+            member
+            SET
+            id4 = #{member.uid4}
+            WHERE
+            main_id = #{member.iid};
+        </if>
+        <if test="member.uid5 != null">
+            UPDATE
+            member
+            SET
+            id5 = #{member.uid5}
+            WHERE
+            main_id = #{member.iid};
+        </if>
+        <if test="member.uid6 != null">
+            UPDATE
+            member
+            SET
+            id6 = #{member.uid6}
+            WHERE
+            main_id = #{member.iid};
+        </if>
+    </update>
+
+    <!--查询成员 id-->
+    <select id="getMember" parameterType="int" resultMap="MemberResultMap">
+        SELECT
+        *
+        FROM
+        member
+        WHERE
+        main_id = #{iid};
+    </select>
+
+    <!--删除用户信息从 member 中-->
+    <update id="removeUserFromMember" parameterType="com.yiyexy.model.car.Member">
+        <if test="member.uid1 != null">
+            DELETE
+            FROM
+            member
+            WHERE
+            main_id = #{member.iid};
+        </if>
+        <if test="member.uid2 != null">
+            UPDATE
+            member
+            SET
+            id2 = 0
+            WHERE
+            main_id = #{member.iid};
+        </if>
+        <if test="member.uid3 != null">
+            UPDATE
+            member
+            SET
+            id3 = 0
+            WHERE
+            main_id = #{member.iid};
+        </if>
+        <if test="member.uid4 != null">
+            UPDATE
+            member
+            SET
+            id4 = 0
+            WHERE
+            main_id = #{member.iid};
+        </if>
+        <if test="member.uid5 != null">
+            UPDATE
+            member
+            SET
+            id5 = 0
+            WHERE
+            main_id = #{member.iid};
+        </if>
+        <if test="member.uid6 != null">
+            UPDATE
+            member
+            SET
+            id6 = 0
+            WHERE
+            main_id = #{member.iid};
+        </if>
+    </update>
+</mapper>

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 /**
  * <p>Created on 2017/5/7.</p>
  *
@@ -117,5 +119,15 @@ public class UserDaoTest {
         Integer result = userDao.getUpdatePwdCount(mobile);
 
         LOGGER.info("测试结果:{}", result);
+    }
+
+    @Test
+    public void testGetUserByIid() {
+
+        int iid = 293;
+
+        List<User> users = userDao.getUserByIid(iid);
+
+        LOGGER.info("测试结果:{}", users);
     }
 }

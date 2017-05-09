@@ -35,22 +35,22 @@ public class CarInformation implements Comparable<CarInformation>, Serializable 
     /**
      * 拼车下限时间小时值ֵ
      */
-    private String startTime_min_hour;
+    private String startTimeMinHour;
 
     /**
      * 拼车下限时间分钟值ֵ
      */
-    private String startTime_min_min;
+    private String startTimeMinMin;
 
     /**
      * 拼车上限时间小时值ֵ
      */
-    private String startTime_max_hour;
+    private String startTimeMaxHour;
 
     /**
      * 拼车上限时间分钟值ֵ
      */
-    private String startTime_max_min;
+    private String startTimeMaxMin;
 
     /**
      * 拼车最大人数
@@ -116,36 +116,36 @@ public class CarInformation implements Comparable<CarInformation>, Serializable 
         this.arrivePos = arrivePos;
     }
 
-    public String getStartTime_min_hour() {
-        return startTime_min_hour;
+    public String getStartTimeMinHour() {
+        return startTimeMinHour;
     }
 
-    public void setStartTime_min_hour(String startTime_min_hour) {
-        this.startTime_min_hour = startTime_min_hour;
+    public void setStartTimeMinHour(String startTimeMinHour) {
+        this.startTimeMinHour = startTimeMinHour;
     }
 
-    public String getStartTime_min_min() {
-        return startTime_min_min;
+    public String getStartTimeMinMin() {
+        return startTimeMinMin;
     }
 
-    public void setStartTime_min_min(String startTime_min_min) {
-        this.startTime_min_min = startTime_min_min;
+    public void setStartTimeMinMin(String startTimeMinMin) {
+        this.startTimeMinMin = startTimeMinMin;
     }
 
-    public String getStartTime_max_hour() {
-        return startTime_max_hour;
+    public String getStartTimeMaxHour() {
+        return startTimeMaxHour;
     }
 
-    public void setStartTime_max_hour(String startTime_max_hour) {
-        this.startTime_max_hour = startTime_max_hour;
+    public void setStartTimeMaxHour(String startTimeMaxHour) {
+        this.startTimeMaxHour = startTimeMaxHour;
     }
 
-    public String getStartTime_max_min() {
-        return startTime_max_min;
+    public String getStartTimeMaxMin() {
+        return startTimeMaxMin;
     }
 
-    public void setStartTime_max_min(String startTime_max_min) {
-        this.startTime_max_min = startTime_max_min;
+    public void setStartTimeMaxMin(String startTimeMaxMin) {
+        this.startTimeMaxMin = startTimeMaxMin;
     }
 
     public int getMaxMember() {
@@ -188,17 +188,16 @@ public class CarInformation implements Comparable<CarInformation>, Serializable 
                 ", startDate=" + startDate +
                 ", startPos='" + startPos + '\'' +
                 ", arrivePos='" + arrivePos + '\'' +
-                ", startTime_min_hour='" + startTime_min_hour + '\'' +
-                ", startTime_min_min='" + startTime_min_min + '\'' +
-                ", startTime_max_hour='" + startTime_max_hour + '\'' +
-                ", startTime_max_min='" + startTime_max_min + '\'' +
+                ", startTimeMinHour='" + startTimeMinHour + '\'' +
+                ", startTimeMinMin='" + startTimeMinMin + '\'' +
+                ", startTimeMaxHour='" + startTimeMaxHour + '\'' +
+                ", startTimeMaxMin='" + startTimeMaxMin + '\'' +
                 ", maxMember=" + maxMember +
                 ", curtMember=" + curtMember +
                 ", message='" + message + '\'' +
                 ", pubTime=" + pubTime +
                 '}';
     }
-
 
     @Override
     public int compareTo(CarInformation o) {

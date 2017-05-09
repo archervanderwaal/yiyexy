@@ -30,7 +30,7 @@
     </select>
 
     <!--用户注册-->
-    <insert id="insertUser" parameterType="com.yiyexy.model.common.User" useGeneratedKeys="true" keyProperty="uid">
+    <insert id="insertUser" parameterType="com.yiyexy.model.common.User" useGeneratedKeys="true" keyProperty="user.uid">
         <if test="user.password != null and user.mobile != null">
             INSERT INTO
             user (mobile, password)
@@ -123,5 +123,21 @@
             user
             WHERE mobile = #{user.mobile} AND password = #{user.password};
         </if>
+    </select>
+
+    <!--查询拼车信息的成员-->
+    <select id="getUserByIid" parameterType="int" resultMap="UserResultMap">
+        SELECT
+        u.id, u.icon, u.user_name, u.qq, u.mobile
+        FROM
+        user u
+        LEFT JOIN member m
+		ON u.id = m.id1
+		OR u.id = m.id2
+		OR u.id = m.id3
+		OR u.id = m.id4
+		OR u.id = m.id5
+		OR u.id = m.id6
+		WHERE m.main_id = #{iid};
     </select>
 </mapper>
