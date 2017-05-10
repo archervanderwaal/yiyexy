@@ -1,13 +1,21 @@
 package com.yiyexy.service.car.impl;
 
+import com.yiyexy.constant.CarInformationConstant;
+import com.yiyexy.constant.CommonConstant;
+import com.yiyexy.constant.MemberConstant;
 import com.yiyexy.dao.car.CarInformationDao;
 import com.yiyexy.model.car.CarInformation;
 import com.yiyexy.service.car.ICarInformationService;
+import com.yiyexy.util.DateUtils;
+import com.yiyexy.util.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <P>Created on 2017/5/9.</P>
@@ -62,5 +70,42 @@ public class CarInformationService implements ICarInformationService {
     @Override
     public List<CarInformation> getUserSignedUpCarInformation(int uid) {
         return carInformationDao.getAllCarInfomationByUser(uid);
+    }
+
+    /**
+     * 发布拼车信息
+     * @param carInformation
+     * @return
+     */
+    @Override
+    public Map<String, String> createStroke(CarInformation carInformation) {
+        Map<String, String> datas = new HashMap<>();
+        carInformation.setPubTime(new Date());
+        //先查询已有的拼车信息
+        List<CarInformation> carInformations = carInformationDao.getAllCarInfomationByUser(carInformation.getUid());
+        Date startDate = carInformation.getStartDate();
+        String startPos = carInformation.getStartPos();
+        if (ObjectUtil.isEmpty(startDate) || StringUtils.isEmpty(startPos)) {
+            datas.put(CommonConstant.FAIL, CommonConstant.PARAM_BIND_FAILED);
+        }
+        for (CarInformation information : carInformations) {
+            //如果出发时间相同
+            if (DateUtils.getDifferenceDays(information.getStartDate(), startDate) == 0) {
+                //如果开始地点相同
+                if (information.getStartPos().equals(startPos)) {
+                    datas.put(CommonConstant.FAIL, MemberConstant.INVAILD_SIGN_UP);
+                    return datas;
+                }
+            }
+        }
+
+        //可以发布拼车信息
+        carInformationDao.insertCarInformation(carInformation);
+        if (!ObjectUtil.isEmpty(carInformation.getIid())) {
+            datas.put(CommonConstant.SUCCESS, CommonConstant.SUCCESS);
+            return datas;
+        }
+        datas.put(CommonConstant.FAIL, CarInformationConstant.CREATE_STROKE_FAILED);
+        return datas;
     }
 }

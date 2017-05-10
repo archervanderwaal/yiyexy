@@ -11,6 +11,7 @@ import com.yiyexy.model.car.Member;
 import com.yiyexy.model.common.User;
 import com.yiyexy.service.car.ICarInformationService;
 import com.yiyexy.service.car.IMemberService;
+import com.yiyexy.util.DateUtils;
 import com.yiyexy.util.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,6 @@ public class MemberService implements IMemberService {
 
     /**
      * 取消用户uid在iid拼车的行程信息
-     *
      * @param iid
      * @param uid
      * @return
@@ -86,7 +86,6 @@ public class MemberService implements IMemberService {
 
     /**
      * 添加用户uid到行程中去
-     *
      * @param iid
      * @param uid
      */
@@ -206,7 +205,7 @@ public class MemberService implements IMemberService {
         if (!CollectionUtils.isEmpty(carInformations)) {
             for (CarInformation information : carInformations) {
                 //如果出发日期是同一天并且出发地点还是相同的，那么不符合报名的规则
-                if (information.getStartDate().compareTo(startDate) == 0) {
+                if (DateUtils.getDifferenceDays(information.getStartDate(), startDate) == 0) {
                     if (information.getStartPos().equals(startPos)) {
                         datas.put(CommonConstant.FAIL, MemberConstant.INVAILD_SIGN_UP);
                         return datas;

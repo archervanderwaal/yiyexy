@@ -20,4 +20,6 @@ public class CommonConstant {
     public static final String INVALID_MOBILE_NUM = "无效的手机号码";
 
     public static final String VALIDATE_TYPE_DESC = "请求发送验证码的类型, 1表示重置密码的验证码，0表示注册时候的验证码";
+
+    public static final String PARAM_BIND_FAILED = "参数绑定失败";
 }

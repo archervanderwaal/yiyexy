@@ -187,4 +187,14 @@ public class UserService implements IUserService {
         datas.put(CommonConstant.SUCCESS, CommonConstant.SUCCESS);
         return datas;
     }
+
+    /**
+     * 获得用户信息
+     * @param uid
+     * @return
+     */
+    @Override
+    public User getUserInfo(Integer uid) {
+        return userDao.getUserById(uid);
+    }
 }

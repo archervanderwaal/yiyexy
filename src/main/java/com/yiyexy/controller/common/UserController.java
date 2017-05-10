@@ -14,6 +14,7 @@ import com.yiyexy.util.ObjectUtil;
 import com.yiyexy.util.result.Result;
 import com.yiyexy.util.result.ResultBuilder;
 import io.swagger.annotations.*;
+import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -196,5 +197,19 @@ public class UserController  extends BaseController {
         } else {
             return ResultBuilder.fail(datas.get(CommonConstant.FAIL));
         }
+    }
+
+    /**
+     * 获得登录用户的个人信息
+     * @param loginUser
+     * @return
+     */
+    @Authorization
+    @ApiOperation(value = UserConstant.GET_USER_INFO_METHOD_DESC, httpMethod = "GET")
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = UserConstant.AUTHORIZATION_TOKEN, required = true
+            , paramType = "header")})
+    @GetMapping("/info")
+    public Result<User> getUserInfo(@ApiIgnore @CurrentUser User loginUser) {
+        return ResultBuilder.success(loginUser);
     }
 }

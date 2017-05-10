@@ -1,5 +1,7 @@
 package com.yiyexy.service.common;
 
+import com.yiyexy.model.common.User;
+
 import java.util.Map;
 
 /**
@@ -58,4 +60,11 @@ public interface IUserService {
      * @return
      */
     Map<String, String> register(String mobile, String password);
+
+    /**
+     * 获得用户信息
+     * @param uid
+     * @return
+     */
+    User getUserInfo(Integer uid);
 }

@@ -10,12 +10,12 @@ public class CarInformation implements Comparable<CarInformation>, Serializable 
     /**
      * 拼车信息 id
      */
-    private int iid;
+    private Integer iid;
 
     /**
      * 用户 id
      */
-    private int uid;
+    private Integer uid;
 
     /**
      * 开始日期
@@ -76,19 +76,19 @@ public class CarInformation implements Comparable<CarInformation>, Serializable 
         return serialVersionUID;
     }
 
-    public int getIid() {
+    public Integer getIid() {
         return iid;
     }
 
-    public void setIid(int iid) {
+    public void setIid(Integer iid) {
         this.iid = iid;
     }
 
-    public int getUid() {
+    public Integer getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(Integer uid) {
         this.uid = uid;
     }
 

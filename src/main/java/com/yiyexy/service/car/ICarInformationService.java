@@ -4,6 +4,7 @@ import com.yiyexy.model.car.CarInformation;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Created on 2017/5/9.</p>
@@ -41,4 +42,11 @@ public interface ICarInformationService {
      * @return
      */
     List<CarInformation> getUserSignedUpCarInformation(int uid);
+
+    /**
+     * 发布拼车信息
+     * @param carInformation
+     * @return
+     */
+    Map<String, String> createStroke(CarInformation carInformation);
 }

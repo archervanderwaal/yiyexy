@@ -44,4 +44,6 @@ public class UserConstant {
     public static final int LOGIN_SUCCESS = 1;
 
     public static final String USER_REGISTER_METHOD_DESC = "用户注册(参数:mobile, password body参数, validateCode:路径参数)";
+
+    public static final String GET_USER_INFO_METHOD_DESC = "获得用户个人信息接口";
 }
