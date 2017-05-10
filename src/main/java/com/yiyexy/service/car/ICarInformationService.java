@@ -34,4 +34,11 @@ public interface ICarInformationService {
      * @return
      */
     List<CarInformation> getCarInformationsByStartDate(Date startDate);
+
+    /**
+     * 根据用户查询用户所参加或者发起的拼车信息
+     * @param uid
+     * @return
+     */
+    List<CarInformation> getUserSignedUpCarInformation(int uid);
 }

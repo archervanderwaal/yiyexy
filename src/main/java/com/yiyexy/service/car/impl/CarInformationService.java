@@ -52,4 +52,15 @@ public class CarInformationService implements ICarInformationService {
     public List<CarInformation> getCarInformationsByStartDate(Date startDate) {
         return carInformationDao.getCarInformationsByStartDate(startDate);
     }
+
+    /**
+     * 根据用户查询用户所参加或者发起的拼车信息
+     *
+     * @param uid
+     * @return
+     */
+    @Override
+    public List<CarInformation> getUserSignedUpCarInformation(int uid) {
+        return carInformationDao.getAllCarInfomationByUser(uid);
+    }
 }

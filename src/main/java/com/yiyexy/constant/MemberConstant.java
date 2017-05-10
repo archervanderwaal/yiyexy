@@ -23,4 +23,6 @@ public class MemberConstant {
 
     public static final String NO_SIGN_UP_THIS_CAR_INFORMATION = "没有加入此拼车信息，所以你没有权限取消该行程";
 
+    public static final String INVAILD_SIGN_UP = "请检查您现有的拼车信息，您当前的操作和已有拼车冲突";
+
 }

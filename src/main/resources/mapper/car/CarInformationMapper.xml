@@ -33,6 +33,7 @@
         </if>
     </insert>
 
+    <!--删除行程-->
     <delete id="removeCarInformation" parameterType="int">
         DELETE
         FROM

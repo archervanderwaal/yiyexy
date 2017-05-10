@@ -36,4 +36,12 @@ public interface IMemberService {
      * @return
      */
     Map<String, String> addUserToStroke(int iid, int uid);
+
+    /**
+     * 判断uid是否可以报名iid这个行程信息
+     * @param uid
+     * @param iid
+     * @return
+     */
+    Map<String, String> isCanSignUpCarInformation(int uid, int iid);
 }
