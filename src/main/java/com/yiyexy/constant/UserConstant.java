@@ -34,10 +34,14 @@ public class UserConstant {
     public static final String MOBILE_DESC = "用户手机号码";
 
     public static final String AUTHORIZATION_TOKEN = "授权码(格式: uid_token)";
+
+    public static final String RESET_PASSWORD_METHOD_DESC = "重置密码接口(参数: mobile, password body参数, validateCode 路径参数)";
     
     public static final int NO_THIS_MOBILE = -1;
 
     public static final int ERROR_PASSWORD = 0;
 
     public static final int LOGIN_SUCCESS = 1;
+
+    public static final String USER_REGISTER_METHOD_DESC = "用户注册(参数:mobile, password body参数, validateCode:路径参数)";
 }

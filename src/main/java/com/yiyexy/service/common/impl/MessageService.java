@@ -1,11 +1,13 @@
 package com.yiyexy.service.common.impl;
 
+import com.yiyexy.annotation.Authorization;
 import com.yiyexy.config.MessageConfig;
 import com.yiyexy.constant.CommonConstant;
 import com.yiyexy.constant.ValidateConstant;
 import com.yiyexy.sender.MessageSender;
 import com.yiyexy.service.common.IMessageService;
 import com.yiyexy.util.ObjectUtil;
+import com.yiyexy.util.StringRedisTempldateUtil;
 import com.yiyexy.util.ValidateCodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +36,9 @@ public class MessageService implements IMessageService {
 
     @Autowired
     private MessageSender messageSender;
+
+    @Autowired
+    private StringRedisTempldateUtil stringRedisTempldateUtil;
 
     private RedisTemplate<String, Integer> redisTemplate;
 
@@ -146,6 +152,14 @@ public class MessageService implements IMessageService {
      */
     @Override
     public boolean checkValidateIsValid(String validateCode, String mobile) {
+
+        //redis 取出缓存
+        String originValidateCode = stringRedisTempldateUtil.getStringRedisTempldate().boundValueOps(mobile).get();
+
+        //如果相等
+        if (StringUtils.isEmpty(originValidateCode) || !originValidateCode.trim().equals(validateCode.trim())) {
+             return false;
+        }
         return true;
     }
 }

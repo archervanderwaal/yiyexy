@@ -1,17 +1,25 @@
 package com.yiyexy.service.car.impl;
 
+import com.yiyexy.constant.CarInformationConstant;
+import com.yiyexy.constant.CommonConstant;
+import com.yiyexy.constant.MemberConstant;
 import com.yiyexy.dao.car.CarInformationDao;
 import com.yiyexy.dao.car.MemberDao;
 import com.yiyexy.dao.common.UserDao;
 import com.yiyexy.exception.MemberUserIsFullException;
+import com.yiyexy.model.car.CarInformation;
 import com.yiyexy.model.car.Member;
 import com.yiyexy.model.common.User;
 import com.yiyexy.service.car.IMemberService;
+import com.yiyexy.util.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>Created on 2017/5/9.</p>
@@ -40,21 +48,26 @@ public class MemberService implements IMemberService {
      */
     @Override
     @Transactional
-    public boolean cancelStroke(int iid, int uid) {
+    public Map<String, String> cancelStroke(int iid, int uid) {
 
+        Map<String, String> datas = new HashMap<>();
+
+        //首先判断要取消的这个用户是否加入了拼车该拼车信息如果是，继续操作，反之无权限
+        if (!this.isSignedCarInformation(uid, iid)) {
+            datas.put(CommonConstant.FAIL,  MemberConstant.NO_SIGN_UP_THIS_CAR_INFORMATION);
+            return datas;
+        }
         //先查询iid这个拼车信息的成员
         Member member = memberDao.getMember(iid);
         Member param = this.conversionMember(member, uid);
-        if (param == null) {
-            return false;
-        }
         param.setIid(iid);
         memberDao.removeUserFromMember(param);
         if (param.getUid1() != null) {
             //删除拼车信息
             carInformationDao.removeCarInformation(iid);
         }
-        return true;
+        datas.put(CommonConstant.SUCCESS, CommonConstant.SUCCESS);
+        return datas;
     }
 
     /**
@@ -73,9 +86,22 @@ public class MemberService implements IMemberService {
      * @param uid
      */
     @Override
-    public void addUserToStroke(int iid, int uid) throws MemberUserIsFullException {
+    public Map<String, String> addUserToStroke(int iid, int uid) {
+
+        Map<String, String> datas = new HashMap<>();
         Member member = memberDao.getMember(iid);
+        if (ObjectUtil.isEmpty(member)) {
+            datas.put(CommonConstant.FAIL, CarInformationConstant.NO_THIS_IID_CAR_INFORMATION);
+            return datas;
+        }
         Member param = new Member();
+
+        //此处应该判断用户是否已经加入拼车信息
+        if (this.isSignedCarInformation(uid, iid)) {
+            datas.put(CommonConstant.FAIL, MemberConstant.ALERDY_SIGN_UP_CAR_INFORMATION);
+            return datas;
+        }
+
         param.setIid(iid);
         if (member.getUid2() == 0) {
             param.setUid2(uid);
@@ -88,11 +114,37 @@ public class MemberService implements IMemberService {
         } else if (member.getUid6() == 0) {
             param.setUid6(uid);
         } else {
-            throw new MemberUserIsFullException("成员已满");
+            datas.put(CommonConstant.FAIL, MemberConstant.MEMBER_IS_FULL);
+            return datas;
         }
         memberDao.addUserToMember(param);
+        datas.put(CommonConstant.SUCCESS, CommonConstant.SUCCESS);
+        return datas;
     }
 
+    /**
+     * 判断用户是否已经加入拼车信息
+     * @param uid
+     * @param iid
+     * @return
+     */
+    private boolean isSignedCarInformation(int uid, int iid) {
+        Member member = memberDao.getMember(iid);
+        if (Objects.equals(member.getUid1(), uid)) {
+            return true;
+        } else if (member.getUid2() == uid) {
+            return true;
+        } else if (member.getUid3() == uid) {
+            return true;
+        } else if (member.getUid4() == uid) {
+            return true;
+        } else if (member.getUid5() == uid) {
+            return true;
+        } else if (member.getUid6() == uid) {
+            return true;
+        }
+        return false;
+    }
     /**
      * 格式参数
      * @param member

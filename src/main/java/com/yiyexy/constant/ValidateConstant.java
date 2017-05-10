@@ -19,8 +19,18 @@ public class ValidateConstant {
 
     public static final long VALIDATE_CODE_VALID_TIME_MINUNTES = 30L;
 
+    public static final String USER_COMMIT_VALIDATE_CODE = "用户提交的验证码";
+
     //设置多少天之内发送验证码数目有限
     public static final long VALIDATE_CHECK_DAYS = 7L;
 
     public static final String VALIDATE_REDIS_SUFFIX = "_count";
+
+    public static final int RESET_PASSWORD_VALIDATE_CODE = 1;
+
+    public static final int REGISTER_VALIDATE_CODE = 0;
+
+    public static final String THIS_MOBILE_ALERDY_REGISTER = "该手机号码已经注册";
+
+    public static final String VALIDATE_CODE_IS_INVALID = "验证码校验不通过，无法继续这次操作，请重试";
 }

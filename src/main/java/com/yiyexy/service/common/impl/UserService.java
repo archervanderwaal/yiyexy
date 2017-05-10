@@ -135,12 +135,19 @@ public class UserService implements IUserService {
      * @return
      */
     @Override
-    public Map<String, String> sendValidateCode(String moible) {
+    public Map<String, String> sendValidateCode(String moible, int type) {
         Map<String, String> datas = new HashMap<>();
         //正则匹配手机号码
         if (!RegexpUtil.isMobileNum(moible)) {
             datas.put(CommonConstant.FAIL, CommonConstant.INVALID_MOBILE_NUM);
             return datas;
+        }
+        //如果是注册时候发送验证码，先判断手机号码是否已经注册
+        if (type == ValidateConstant.REGISTER_VALIDATE_CODE) {
+            if (userDao.isExistMobile(moible) == DBConstant.HAVE_THIS_RECORD) {
+                datas.put(CommonConstant.FAIL, ValidateConstant.THIS_MOBILE_ALERDY_REGISTER);
+                return datas;
+            }
         }
         //判断是否可以发送短信
         boolean isCanSend = messageService.isCanSendMessage(moible);
@@ -159,6 +166,25 @@ public class UserService implements IUserService {
         } else {
             datas.put(CommonConstant.FAIL, ValidateConstant.VALIDATE_SEND_MAX_COUNT_CODE);
         }
+        return datas;
+    }
+
+    /**
+     * 注册
+     * @param mobile
+     * @param password
+     * @return
+     */
+    @Override
+    public Map<String, String> register(String mobile, String password) {
+        Map<String, String> datas = new HashMap<>();
+        //判断手机号码是否已经注册
+        if (userDao.isExistMobile(mobile) == DBConstant.HAVE_THIS_RECORD) {
+            datas.put(CommonConstant.FAIL, ValidateConstant.THIS_MOBILE_ALERDY_REGISTER);
+            return datas;
+        }
+        userDao.insertUser(new User(password, mobile));
+        datas.put(CommonConstant.SUCCESS, CommonConstant.SUCCESS);
         return datas;
     }
 }

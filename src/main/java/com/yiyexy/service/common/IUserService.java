@@ -49,5 +49,13 @@ public interface IUserService {
      * @param moible
      * @return
      */
-    Map<String, String> sendValidateCode(String moible);
+    Map<String, String> sendValidateCode(String moible, int type);
+
+    /**
+     * 注册
+     * @param mobile
+     * @param password
+     * @return
+     */
+    Map<String, String> register(String mobile, String password);
 }

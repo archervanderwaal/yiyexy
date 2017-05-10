@@ -18,4 +18,6 @@ public class CommonConstant {
     public static final int SEND_MAX_VALIDATE_CODE_ONE_WEEK = 10;
 
     public static final String INVALID_MOBILE_NUM = "无效的手机号码";
+
+    public static final String VALIDATE_TYPE_DESC = "请求发送验证码的类型, 1表示重置密码的验证码，0表示注册时候的验证码";
 }

@@ -3,12 +3,14 @@ package com.yiyexy.controller.car;
 import com.yiyexy.annotation.Authorization;
 import com.yiyexy.annotation.CurrentUser;
 import com.yiyexy.constant.CarInformationConstant;
+import com.yiyexy.constant.CommonConstant;
 import com.yiyexy.constant.MemberConstant;
 import com.yiyexy.constant.UserConstant;
 import com.yiyexy.controller.common.BaseController;
 import com.yiyexy.model.common.User;
 import com.yiyexy.service.car.IMemberService;
 import com.yiyexy.service.car.impl.CarInformationService;
+import com.yiyexy.util.ObjectUtil;
 import com.yiyexy.util.result.Result;
 import com.yiyexy.util.result.ResultBuilder;
 import io.swagger.annotations.Api;
@@ -16,13 +18,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * _____ _                      ___  ___
@@ -64,5 +64,53 @@ public class MemberController extends BaseController {
         List<User> users = memberService.getMemberInfos(iid);
 
         return ResultBuilder.success(users);
+    }
+
+
+    /**
+     * 加入拼车信息
+     * @param loginUser
+     * @param iid
+     * @return
+     */
+    @Authorization
+    @ApiOperation(value = MemberConstant.SIGN_UP_CAR_INFORMATION_METHOD_DESC, httpMethod = "PUT")
+    @ApiImplicitParams({@ApiImplicitParam(name = "iid", value = CarInformationConstant.IID_FIELD_DESC, required = true, paramType = "path"),
+            @ApiImplicitParam(name = "authorization", value = UserConstant.AUTHORIZATION_TOKEN, required = true, paramType = "header")})
+    @PutMapping(value = "/sign/{iid}")
+    public Result<Object> signInformation(@ApiIgnore @CurrentUser User loginUser,
+                                          @PathVariable int iid) {
+
+        int uid = loginUser.getUid();
+        Map<String, String> datas = memberService.addUserToStroke(iid, uid);
+        if (!ObjectUtil.isEmpty(datas.get(CommonConstant.SUCCESS))) {
+            return ResultBuilder.success(datas.get(CommonConstant.SUCCESS));
+        } else {
+            return ResultBuilder.fail(datas.get(CommonConstant.FAIL));
+        }
+    }
+
+    /**
+     * 取消拼车行程
+     * @param loginUser
+     * @param iid
+     * @return
+     */
+    @Authorization
+    @ApiOperation(value =  MemberConstant.CANCEL_CAR_INFORMATION_METHOD_DESC, httpMethod = "DELETE")
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = UserConstant.AUTHORIZATION_TOKEN, required = true, paramType = "header"),
+                        @ApiImplicitParam(name = "iid", value = CarInformationConstant.IID_FIELD_DESC, required = true, paramType = "path")})
+    @DeleteMapping(value = "/cancel/{iid}")
+    public Result<Object> cancelStroke(@ApiIgnore @CurrentUser User loginUser,
+                                       @PathVariable int iid) {
+
+        int uid = loginUser.getUid();
+        Map<String, String> datas = memberService.cancelStroke(iid, uid);
+
+        if (!ObjectUtil.isEmpty(datas.get(CommonConstant.SUCCESS))) {
+            return ResultBuilder.success(datas.get(CommonConstant.SUCCESS));
+        } else {
+            return ResultBuilder.fail(datas.get(CommonConstant.FAIL));
+        }
     }
 }

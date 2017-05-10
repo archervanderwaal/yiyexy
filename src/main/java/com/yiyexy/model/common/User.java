@@ -73,6 +73,14 @@ public class User {
     @JsonIgnore
     private Integer type;
 
+    public User() {
+    }
+
+    public User(String password, String mobile) {
+        this.password = password;
+        this.mobile = mobile;
+    }
+
     public Integer getUid() {
         return uid;
     }

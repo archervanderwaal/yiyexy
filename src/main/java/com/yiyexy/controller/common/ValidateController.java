@@ -20,18 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 /**
- *
- *  _____ _                      ___  ___
- /  ___| |                     |  \/  |
- \ `--.| |_ ___  _ __ _ __ ___ | .  . | __ _
- `--. \ __/ _ \| '__| '_ ` _ \| |\/| |/ _` |
- /\__/ / || (_) | |  | | | | | | |  | | (_| |
- \____/ \__\___/|_|  |_| |_| |_\_|  |_/\__,_| 我想念你，一如独自撸码的忧伤...
-
+ * _____ _                      ___  ___
+ * /  ___| |                     |  \/  |
+ * \ `--.| |_ ___  _ __ _ __ ___ | .  . | __ _
+ * `--. \ __/ _ \| '__| '_ ` _ \| |\/| |/ _` |
+ * /\__/ / || (_) | |  | | | | | | |  | | (_| |
+ * \____/ \__\___/|_|  |_| |_| |_\_|  |_/\__,_| 我想念你，一如独自撸码的忧伤...
+ * <p>
  * <p>Created on 2017/5/9.</p>
  *
  * @author stormma
- *
  * @description: 验证码服务类
  */
 @Api(value = "/api/validate", description = ValidateConstant.VALIDATE_CONTROLLER_DESC)
@@ -44,15 +42,18 @@ public class ValidateController extends BaseController {
 
     /**
      * 发送验证码
+     *
      * @param mobile
      * @return
      */
     @ApiOperation(value = ValidateConstant.VALIDATE_SEND_METHOD_DESC, httpMethod = "GET")
-    @ApiImplicitParams({@ApiImplicitParam(name = "mobile", value = UserConstant.MOBILE_DESC, paramType = "path", required = true)})
-    @GetMapping(value = "/code/{mobile}")
-    public Result<Object> sendValidateCode(@PathVariable String mobile) {
+    @ApiImplicitParams({@ApiImplicitParam(name = "mobile", value = UserConstant.MOBILE_DESC, paramType = "path", required = true),
+            @ApiImplicitParam(name = "type", value = CommonConstant.VALIDATE_TYPE_DESC, paramType = "path", required = true)})
+    @GetMapping(value = "/code/{type}/{mobile}")
+    public Result<Object> sendValidateCode(@PathVariable String mobile,
+                                           @PathVariable int type) {
         //发送验证码
-        Map<String, String> datas = userService.sendValidateCode(mobile);
+        Map<String, String> datas = userService.sendValidateCode(mobile, type);
         //发送成功
         if (!ObjectUtil.isEmpty(datas.get(CommonConstant.SUCCESS))) {
             return ResultBuilder.success();

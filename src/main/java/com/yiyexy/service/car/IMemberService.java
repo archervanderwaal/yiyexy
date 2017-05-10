@@ -1,9 +1,9 @@
 package com.yiyexy.service.car;
 
-import com.yiyexy.exception.MemberUserIsFullException;
 import com.yiyexy.model.common.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Created on 2017/5/9.</p>
@@ -20,7 +20,7 @@ public interface IMemberService {
      * @param uid
      * @return
      */
-    boolean cancelStroke (int iid, int uid);
+    Map<String, String> cancelStroke (int iid, int uid);
 
     /**
      * 根据拼车信息查询所有成员的信息
@@ -33,6 +33,7 @@ public interface IMemberService {
      * 添加用户uid到行程中去
       * @param iid
      * @param uid
+     * @return
      */
-    void addUserToStroke(int iid, int uid) throws MemberUserIsFullException;
+    Map<String, String> addUserToStroke(int iid, int uid);
 }
